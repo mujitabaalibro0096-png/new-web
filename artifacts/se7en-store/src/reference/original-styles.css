@@ -1,0 +1,114 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-display: "Anton", "Impact", sans-serif;
+  --font-sans: "Archivo", system-ui, sans-serif;
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-overlay: var(--overlay);
+  --color-whatsapp: var(--whatsapp);
+}
+
+/* Brand: bg #080808, surface #111111, text #F5F5F5, muted #999999, border #272727, red #E50914 */
+:root {
+  --radius: 2px;
+  --background: oklch(0.12 0 0);
+  --foreground: oklch(0.97 0 0);
+  --card: oklch(0.18 0 0);
+  --card-foreground: oklch(0.97 0 0);
+  --popover: oklch(0.18 0 0);
+  --popover-foreground: oklch(0.97 0 0);
+  --primary: oklch(0.58 0.235 27.5);
+  --primary-foreground: oklch(0.97 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.12 0 0);
+  --muted: oklch(0.18 0 0);
+  --muted-foreground: oklch(0.68 0 0);
+  --accent: oklch(0.24 0 0);
+  --accent-foreground: oklch(0.97 0 0);
+  --destructive: oklch(0.58 0.235 27.5);
+  --destructive-foreground: oklch(0.97 0 0);
+  --border: oklch(0.28 0 0);
+  --input: oklch(0.28 0 0);
+  --ring: oklch(0.58 0.235 27.5);
+  --overlay: oklch(0 0 0 / 75%);
+  --whatsapp: oklch(0.72 0.17 150);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: var(--font-display); letter-spacing: 0.01em; text-transform: uppercase; }
+}
+
+@utility btn-primary { @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors disabled:opacity-40 bg-primary text-primary-foreground hover:bg-secondary hover:text-secondary-foreground hover:shadow-[var(--glow-red)] hover:-translate-y-0.5 transition-all; }
+@utility btn-light { @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors disabled:opacity-40 bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground; }
+@utility btn-ghost { @apply inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors disabled:opacity-40 border border-border text-foreground hover:border-primary hover:text-primary hover:shadow-[var(--glow-soft)] transition-all; }
+@utility chip { @apply border border-border px-3 py-2 text-xs uppercase tracking-widest text-muted-foreground transition-colors hover:border-foreground hover:text-foreground; }
+@utility chip-active { @apply border-primary text-foreground bg-primary/10 shadow-[var(--glow-soft)]; }
+@utility field { @apply w-full border border-input bg-background px-3 py-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-primary; }
+@utility label { @apply mb-1 block text-[11px] uppercase tracking-widest text-muted-foreground; }
+@utility eyebrow { @apply text-[11px] font-semibold uppercase tracking-[0.3em] text-primary; }
+
+/* ---- Luminous accents & hover effects ---- */
+:root {
+  --glow-red: 0 0 24px -4px color-mix(in oklab, var(--primary) 70%, transparent), 0 0 60px -20px var(--primary);
+  --glow-soft: 0 10px 40px -12px color-mix(in oklab, var(--primary) 55%, transparent);
+}
+@utility glow { box-shadow: var(--glow-red); }
+@utility text-glow { text-shadow: 0 0 30px color-mix(in oklab, var(--primary) 45%, transparent); }
+@utility lift {
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s, border-color .35s;
+  &:hover { transform: translateY(-4px); box-shadow: var(--glow-soft); border-color: var(--primary); }
+}
+@utility shine {
+  position: relative; overflow: hidden;
+  &::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(110deg, transparent 35%, color-mix(in oklab, var(--foreground) 22%, transparent) 50%, transparent 65%);
+    transform: translateX(-120%); transition: transform .8s ease; }
+  &:hover::after { transform: translateX(120%); }
+}
+@utility link-line {
+  position: relative;
+  &::after { content: ""; position: absolute; left: 0; bottom: -6px; height: 1px; width: 100%;
+    background: var(--primary); box-shadow: 0 0 8px var(--primary); transform: scaleX(0); transform-origin: left; transition: transform .3s; }
+  &:hover::after { transform: scaleX(1); }
+}
+@utility ambient {
+  background: radial-gradient(40% 50% at 70% 40%, color-mix(in oklab, var(--primary) 35%, transparent), transparent 70%);
+  animation: ambient 7s ease-in-out infinite alternate; mix-blend-mode: screen;
+}
+@utility glow-dot { animation: pulse-glow 2.4s ease-in-out infinite; }
+@keyframes ambient { from { opacity: .35; transform: scale(1); } to { opacity: .8; transform: scale(1.08); } }
+@keyframes pulse-glow { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--whatsapp) 60%, transparent); } 50% { box-shadow: 0 0 0 12px transparent; } }
+@media (prefers-reduced-motion: reduce) { .ambient, .glow-dot { animation: none; } }

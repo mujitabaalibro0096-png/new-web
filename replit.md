@@ -1,6 +1,6 @@
-# [Project name]
+# SE7EN Storefront
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A responsive storefront for SE7EN streetwear, featuring Drop 01 products, collections, a preview bag, wishlist, and Pakistan-focused PKR pricing.
 
 ## Run & Operate
 
@@ -22,7 +22,10 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/se7en-store/src/App.tsx` — storefront and shopping interactions
+- `artifacts/se7en-store/src/index.css` — storefront styling
+- `artifacts/se7en-store/src/reference/` — source files from the supplied frontend ZIP
+- `artifacts/se7en-store/src/assets/` — supplied product and campaign images
 
 ## Architecture decisions
 
@@ -30,7 +33,7 @@ _Populate as you build — non-obvious choices a reader couldn't infer from the 
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Visitors can browse collections and products, search and sort the catalog, save wishlist items, manage a browser-persisted preview bag, view the size guide, and step through a checkout preview.
 
 ## User preferences
 
@@ -38,7 +41,9 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Products in the supplied catalog are marked coming soon. The bag and checkout are previews; no orders or payments are processed.
+- Newsletter and welcome-offer forms are visual previews only; email addresses are not saved or sent.
+- Do not add real order, payment, inventory, or email claims until the client supplies the required merchant details and integrations.
 
 ## Pointers
 
