@@ -95,8 +95,8 @@ function Hero({ onShop }: { onShop: () => void }) {
   return (
     <section className="hero">
       <img className="hero-image" src={heroImage} alt="Model in an oversized graphic shirt, lit in red" />
-      <div className="hero-ambient" aria-hidden="true" />
       <div className="hero-shade" />
+      <div className="hero-ambient" aria-hidden="true" />
       <div className="hero-copy">
         <p className="eyebrow"><span className="red-mark" /> DROP 01 · BAGGY SHIRTS + HOODIES · COMING SOON</p>
         <h1>BUILT<br /><span>DIFFERENT.</span></h1>

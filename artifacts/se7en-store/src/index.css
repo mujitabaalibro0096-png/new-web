@@ -73,7 +73,7 @@ h1, h2, h3, .brand, .tile-caption strong { font-family: Anton, Impact, sans-seri
 .mobile-only { display: none; }
 .hero { position: relative; isolation: isolate; min-height: 650px; height: min(78vh, 850px); overflow: hidden; border-bottom: 1px solid #212121; background: #090909; }
 .hero-image { position: absolute; z-index: -2; right: 0; top: 0; width: 76%; height: 100%; object-fit: cover; object-position: 54% 43%; }
-.hero-ambient { position: absolute; z-index: -1; inset: -18%; pointer-events: none; background: radial-gradient(ellipse at 77% 50%, rgb(193 7 20 / 25%) 0%, rgb(116 5 15 / 12%) 26%, transparent 58%); opacity: .62; transform: translate3d(-2%, 0, 0) scale(1); animation: red-drift 13s ease-in-out infinite alternate; }
+.hero-ambient { position: absolute; z-index: 0; inset: -18%; pointer-events: none; background: radial-gradient(ellipse at 77% 50%, rgb(193 7 20 / 34%) 0%, rgb(116 5 15 / 17%) 27%, transparent 58%), radial-gradient(ellipse at 31% 80%, rgb(110 10 22 / 18%) 0%, transparent 42%); opacity: .54; mix-blend-mode: screen; transform: translate3d(-4%, 0, 0) scale(.94); animation: red-drift 10s ease-in-out infinite alternate; }
 .hero-shade { position: absolute; z-index: 0; inset: 0; background: linear-gradient(90deg, #080808 0%, rgb(8 8 8 / 89%) 26%, rgb(8 8 8 / 48%) 54%, rgb(8 8 8 / 8%) 100%), linear-gradient(0deg, rgb(0 0 0 / 65%), transparent 42%); }
 .hero-copy { position: absolute; top: 49%; left: max(6.2%, calc((100vw - 1280px) / 2)); transform: translateY(-43%); z-index: 1; }
 .eyebrow { margin-bottom: 0; color: #e0111e; font-size: 9px; font-weight: 700; letter-spacing: .24em; }
@@ -313,7 +313,7 @@ h1, h2, h3, .brand, .tile-caption strong { font-family: Anton, Impact, sans-seri
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes rise-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes slide-in { from { opacity: .7; transform: translateX(25px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes red-drift { from { opacity: .42; transform: translate3d(-2%, -1%, 0) scale(.98); } to { opacity: .76; transform: translate3d(2%, 1%, 0) scale(1.04); } }
+@keyframes red-drift { from { opacity: .3; transform: translate3d(-5%, -2%, 0) scale(.92); } to { opacity: .78; transform: translate3d(5%, 2%, 0) scale(1.08); } }
 @media (max-width: 800px) {
   .hero { min-height: 570px; height: 78vh; }
   .hero-image { width: 100%; object-position: 57% center; }
@@ -413,6 +413,7 @@ h1, h2, h3, .brand, .tile-caption strong { font-family: Anton, Impact, sans-seri
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  .hero-ambient { animation: none !important; }
 }
 
 /* SE7EN / gothic streetwear finish */
@@ -477,7 +478,9 @@ h2, .modal-heading h2, .checkout-head h2 {
     linear-gradient(0deg, rgb(0 0 0 / 65%), transparent 42%);
 }
 .hero-ambient {
-  background: radial-gradient(ellipse at 77% 50%, rgb(185 12 28 / 23%) 0%, rgb(116 5 15 / 11%) 28%, transparent 60%);
+  background:
+    radial-gradient(ellipse at 77% 50%, rgb(202 13 32 / 40%) 0%, rgb(116 5 15 / 18%) 27%, transparent 58%),
+    radial-gradient(ellipse at 31% 80%, rgb(130 9 25 / 22%) 0%, transparent 43%);
 }
 .eyebrow, .red-mark { color: #e02a37; }
 .hero h1 { text-shadow: 0 3px 32px rgb(0 0 0 / 35%); }
