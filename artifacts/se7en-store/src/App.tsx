@@ -77,7 +77,7 @@ function Header({ shop, open }: { shop: Shop; open: (overlay: Overlay) => void }
     <header className="site-header">
       <div className="header-inner">
         <button className="icon-button mobile-only" aria-label="Open menu" onClick={() => open("menu")}><Menu /></button>
-        <a href="#top" className="brand" aria-label="SE7EN home">SE<span>7</span>EN</a>
+        <a href="#top" className="brand" aria-label="SE7EN home" data-testid="link-brand-home-header"><img src="/brand/se7en-gothic-black-red.png" alt="SE7EN" /></a>
         <nav className="desktop-nav" aria-label="Main navigation">
           <a href="#top">Home</a><a href="#shop">Shop</a><a href="#collections">Collections</a><a href="#about">About</a>
         </nav>
@@ -95,6 +95,7 @@ function Hero({ onShop }: { onShop: () => void }) {
   return (
     <section className="hero">
       <img className="hero-image" src={heroImage} alt="Model in an oversized graphic shirt, lit in red" />
+      <div className="hero-ambient" aria-hidden="true" />
       <div className="hero-shade" />
       <div className="hero-copy">
         <p className="eyebrow"><span className="red-mark" /> DROP 01 · BAGGY SHIRTS + HOODIES · COMING SOON</p>
@@ -200,7 +201,7 @@ function Newsletter({ notify }: { notify: (message: string) => void }) {
 function Footer({ goShop, open }: { goShop: (category: Category | "all") => void; open: (overlay: Overlay) => void }) {
   return (
     <footer className="footer" id="contact"><div className="section-wrap footer-grid">
-      <div className="footer-brand"><a className="brand" href="#top">SE<span>7</span>EN</a><p>BUILT DIFFERENT.</p></div>
+      <div className="footer-brand"><a className="brand" href="#top" aria-label="SE7EN home" data-testid="link-brand-home-footer"><img src="/brand/se7en-gothic-black-red.png" alt="SE7EN" /></a><p>BUILT DIFFERENT.</p></div>
       <div><p className="footer-label">THE DROP</p><button onClick={() => goShop("all")}>All pieces</button><button onClick={() => goShop("baggy")}>Baggy shirts</button><button onClick={() => goShop("hoodie")}>Hoodies</button></div>
       <div><p className="footer-label">NEED TO KNOW</p><button onClick={() => open("size")}>Size guide</button><p>Shipping: {pkr(SHIPPING_FEE)}<br />Free over {pkr(FREE_SHIPPING)}</p><p>Returns: contact us within 7 days</p></div>
       <div><p className="footer-label">SE7EN / PAKISTAN</p><a href="#about">About the label</a><p>Instagram · TikTok · WhatsApp<br />Links coming soon</p></div>
@@ -214,7 +215,7 @@ function Modal({ close, children, wide, side }: { close: () => void; children: R
 function CloseButton({ close }: { close: () => void }) { return <button aria-label="Close" className="close-button" onClick={close}><X size={19} /></button>; }
 
 function MobileMenu({ close, goShop, open }: { close: () => void; goShop: (category: Category | "all") => void; open: (overlay: Overlay) => void }) {
-  return <div className="mobile-menu"><div className="menu-top"><a className="brand" href="#top" onClick={close}>SE<span>7</span>EN</a><CloseButton close={close} /></div><nav><a href="#top" onClick={close}>Home</a><button onClick={() => goShop("all")}>Shop</button><a href="#collections" onClick={close}>Collections</a><a href="#about" onClick={close}>About</a><button onClick={() => open("search")}>Search</button><button onClick={() => open("wish")}>Wishlist</button><button onClick={() => open("cart")}>Bag</button></nav><p>DROP 01 · COMING SOON</p></div>;
+  return <div className="mobile-menu"><div className="menu-top"><a className="brand" href="#top" aria-label="SE7EN home" data-testid="link-brand-home-mobile" onClick={close}><img src="/brand/se7en-gothic-black-red.png" alt="SE7EN" /></a><CloseButton close={close} /></div><nav><a href="#top" onClick={close}>Home</a><button onClick={() => goShop("all")}>Shop</button><a href="#collections" onClick={close}>Collections</a><a href="#about" onClick={close}>About</a><button onClick={() => open("search")}>Search</button><button onClick={() => open("wish")}>Wishlist</button><button onClick={() => open("cart")}>Bag</button></nav><p>DROP 01 · COMING SOON</p></div>;
 }
 
 function SearchOverlay({ close, onPick }: { close: () => void; onPick: (product: Product) => void }) {

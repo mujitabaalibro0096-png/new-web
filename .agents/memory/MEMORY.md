@@ -1,0 +1,1 @@
+- [SE7EN client visual direction](se7en-brand-direction.md) — client wants Gothic-inspired branding anchored by the black-and-red SE7EN logo.
