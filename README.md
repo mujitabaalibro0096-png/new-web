@@ -27,14 +27,25 @@ Output is written to `artifacts/se7en-store/dist/public`.
 
 ## Deploy
 
-- **Cloudflare Pages** — build command `pnpm --filter @workspace/se7en-store run build`, output directory `artifacts/se7en-store/dist/public`.
-- **Vercel** — `vercel.json` at the repo root already sets the framework, build command, output directory and cache headers.
+Vercel runs this repo as a single project with two services, configured in `vercel.json`:
+
+| Service | Root | Public path | Notes |
+| --- | --- | --- | --- |
+| `se7en-store` | `artifacts/se7en-store` | `/` (catch-all) | Vite static build, output `dist/public` |
+| `api-server` | `artifacts/api-server` | `/api/*` | Express app, entrypoint `src/app.ts`, only `/api/healthz` today |
+
+- `mockup-sandbox` is a design-only component canvas and is intentionally not deployed.
+- No service bindings are declared: the storefront is fully static and never calls the API, and the API does not call anything else.
+- Requests keep their original path inside a service, so the public `/api/healthz` hits the Express router mounted at `/api` and resolves to `/healthz`.
+- Cache headers stay at the top level of `vercel.json` and apply to all public traffic.
+
+After changing `vercel.json`, redeploy from the Vercel dashboard with **Framework Preset: Other** and no dashboard-level build/output overrides — the service settings come from the file.
 
 ## Layout
 
 ```
 artifacts/se7en-store/    the storefront (React app, styles, assets)
-artifacts/api-server/     unused API scaffold from the starter
+artifacts/api-server/     Express API service (health check only today)
 attached_assets/          product photography used by the store
 ```
 
