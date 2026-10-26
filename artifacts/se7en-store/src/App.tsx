@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   Search, Heart, ShoppingBag, Menu, X, Minus, Plus, ArrowUpRight,
-  Check, ChevronRight, SlidersHorizontal,
+  Check, ChevronRight, SlidersHorizontal, MessageCircle,
 } from "lucide-react";
 import heroImage from "@/assets/hero.jpg";
 import baggyImage from "@/assets/baggy.jpg";
 import hoodieImage from "@/assets/hoodie.jpg";
 import {
-  CATEGORIES, PRODUCTS, FREE_SHIPPING, SHIPPING_FEE, pkr, unitPrice,
+  CATEGORIES, PRODUCTS, FREE_SHIPPING, SHIPPING_FEE, WHATSAPP_NUMBER, pkr, unitPrice,
   useShop, type Category, type Product, type Shop,
 } from "@/reference/original-store";
 
@@ -40,6 +40,19 @@ export default function App() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+  useEffect(() => {
+    if (!overlay && !quick) return undefined;
+    const { body, documentElement } = document;
+    const scrollbar = window.innerWidth - documentElement.clientWidth;
+    const previousOverflow = body.style.overflow;
+    const previousPadding = body.style.paddingRight;
+    body.style.overflow = "hidden";
+    if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
+    return () => {
+      body.style.overflow = previousOverflow;
+      body.style.paddingRight = previousPadding;
+    };
+  }, [overlay, quick]);
   const notify = (message: string) => setToast(message);
   const goShop = (category: Category | "all") => {
     setFilter(category);
@@ -118,7 +131,7 @@ function Collections({ onPick }: { onPick: (category: Category) => void }) {
       </div>
       <div className="collection-grid">
         <button className="collection-tile" onClick={() => onPick("baggy")}>
-          <img src={baggyImage} alt="Charcoal oversized baggy shirt" loading="lazy" /><span className="collection-wash" />
+          <img src={baggyImage} alt="Black oversized baggy shirt" loading="lazy" /><span className="collection-wash" />
           <span className="tile-top">01 / 02 <ArrowUpRight size={17} /></span><span className="tile-caption"><small>DROP 01 — 01</small><strong>BAGGY<br />SHIRTS</strong><em>Explore collection <ChevronRight size={14} /></em></span>
         </button>
         <button className="collection-tile" onClick={() => onPick("hoodie")}>
@@ -158,7 +171,7 @@ function ShopSection({ shop, filter, setFilter, onQuick, notify }: {
 }
 
 function ProductCard({ product, saved, onQuick, toggleWish, index }: { product: Product; saved: boolean; onQuick: (product: Product) => void; toggleWish: () => void; index: number }) {
-  const image = product.category === "baggy" ? baggyImage : hoodieImage;
+  const image = product.image || (product.category === "baggy" ? baggyImage : hoodieImage);
   return (
     <article className="product-card" data-testid={`card-product-${product.id}`}>
       <div className="product-image-wrap">
@@ -204,8 +217,8 @@ function Footer({ goShop, open }: { goShop: (category: Category | "all") => void
       <div className="footer-brand"><a className="brand" href="#top" aria-label="SE7EN home" data-testid="link-brand-home-footer"><img src="/brand/se7en-gothic-black-red.png" alt="SE7EN" /></a><p>BUILT DIFFERENT.</p></div>
       <div><p className="footer-label">THE DROP</p><button onClick={() => goShop("all")}>All pieces</button><button onClick={() => goShop("baggy")}>Baggy shirts</button><button onClick={() => goShop("hoodie")}>Hoodies</button></div>
       <div><p className="footer-label">NEED TO KNOW</p><button onClick={() => open("size")}>Size guide</button><p>Shipping: {pkr(SHIPPING_FEE)}<br />Free over {pkr(FREE_SHIPPING)}</p><p>Returns: contact us within 7 days</p></div>
-      <div><p className="footer-label">SE7EN / PAKISTAN</p><a href="#about">About the label</a><p>Instagram · TikTok · WhatsApp<br />Links coming soon</p></div>
-    </div><div className="footer-bottom"><span>© {new Date().getFullYear()} SE7EN</span><span>DROP 01 — COMING SOON</span><span>FRONTEND PREVIEW / NO ORDERS PROCESSED</span></div></footer>
+      <div><p className="footer-label">SE7EN / PAKISTAN</p><a href="#about">About the label</a><a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer">Order on WhatsApp <ArrowUpRight size={12} /></a><p>Instagram · TikTok<br />Links coming soon</p></div>
+    </div><div className="footer-bottom"><span>© {new Date().getFullYear()} SE7EN</span><span>DROP 01 — COMING SOON</span><span>ORDERS VIA WHATSAPP</span></div></footer>
   );
 }
 
@@ -221,7 +234,7 @@ function MobileMenu({ close, goShop, open }: { close: () => void; goShop: (categ
 function SearchOverlay({ close, onPick }: { close: () => void; onPick: (product: Product) => void }) {
   const [query, setQuery] = useState("");
   const results = query.trim() ? PRODUCTS.filter((product) => `${product.name} ${product.type} ${product.category}`.toLowerCase().includes(query.toLowerCase())) : [];
-  return <div className="search-screen"><div className="search-content"><div className="search-bar"><Search size={20} /><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search the drop" aria-label="Search products" /><CloseButton close={close} /></div><p className="eyebrow">{query ? `${results.length} MATCHING PIECES` : "SEARCH / DROP 01"}</p><div className="search-results">{query && results.length === 0 && <p className="muted">No products match “{query}”.</p>}{results.map((product) => <button key={product.id} onClick={() => onPick(product)}><img src={product.category === "baggy" ? baggyImage : hoodieImage} alt="" /><span><strong>{product.name}</strong><small>{product.type} · COMING SOON</small></span><b>{pkr(product.price)}</b></button>)}</div></div></div>;
+  return <div className="search-screen"><div className="search-content"><div className="search-bar"><Search size={20} /><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search the drop" aria-label="Search products" /><CloseButton close={close} /></div><p className="eyebrow">{query ? `${results.length} MATCHING PIECES` : "SEARCH / DROP 01"}</p><div className="search-results">{query && results.length === 0 && <p className="muted">No products match “{query}”.</p>}{results.map((product) => <button key={product.id} onClick={() => onPick(product)}><img src={product.image || (product.category === "baggy" ? baggyImage : hoodieImage)} alt="" /><span><strong>{product.name}</strong><small>{product.type} · COMING SOON</small></span><b>{pkr(product.price)}</b></button>)}</div></div></div>;
 }
 
 function QuickView({ product, shop, close, openSize, added, notify }: { product: Product; shop: Shop; close: () => void; openSize: () => void; added: () => void; notify: (message: string) => void }) {
@@ -230,12 +243,12 @@ function QuickView({ product, shop, close, openSize, added, notify }: { product:
   const [qty, setQty] = useState(1);
   const [error, setError] = useState("");
   const saved = shop.wish.includes(product.id);
-  const image = product.category === "baggy" ? baggyImage : hoodieImage;
+  const image = product.image || (product.category === "baggy" ? baggyImage : hoodieImage);
   return <Modal close={close} wide><div className="quick-layout"><img className="quick-image" src={image} alt={product.name} /><div className="quick-details"><div className="quick-top"><p className="eyebrow">{product.type} / COMING SOON</p><CloseButton close={close} /></div><h2>{product.name}</h2><p className="quick-price">{pkr(size ? unitPrice(product, size) : product.price)}</p><p className="quick-note">{product.note}</p>
     <div className="quick-group"><span className="field-label">COLOUR — {colour}</span><div className="chips">{product.colours?.map((item) => <button key={item} className={`chip${colour === item ? " selected" : ""}`} onClick={() => setColour(item)}>{item}</button>)}</div></div>
     <div className="quick-group"><div className="size-title"><span className="field-label">SELECT SIZE</span><button onClick={openSize}>SIZE GUIDE</button></div><div className="chips">{product.sizes.map((item) => <button key={item} className={`chip size-chip${size === item ? " selected" : ""}`} onClick={() => { setSize(item); setError(""); }}>{item}</button>)}</div>{error && <p className="form-error">{error}</p>}</div>
-    <div className="quick-actions"><Quantity value={qty} setValue={setQty} /><button className="button-primary preview-add" onClick={() => { if (!size) { setError("Choose a size to add this piece to your preview bag."); return; } shop.add(product.id, size, colour, qty); notify("Added to preview bag"); added(); }}>Add to preview bag</button><button aria-label="Save to wishlist" className={`outline-icon${saved ? " saved" : ""}`} onClick={() => { shop.toggleWish(product.id); notify(saved ? "Removed from wishlist" : "Saved to wishlist"); }}><Heart size={17} fill={saved ? "currentColor" : "none"} /></button></div>
-    <p className="preview-note">PREVIEW ONLY — THIS STYLE IS COMING SOON. NO PURCHASE CAN BE MADE.</p></div></div></Modal>;
+    <div className="quick-actions"><Quantity value={qty} setValue={setQty} /><button className="button-primary preview-add" onClick={() => { if (!size) { setError("Choose a size to add this piece to your bag."); return; } shop.add(product.id, size, colour, qty); notify("Added to bag"); added(); }}>Add to bag</button><button aria-label="Save to wishlist" className={`outline-icon${saved ? " saved" : ""}`} onClick={() => { shop.toggleWish(product.id); notify(saved ? "Removed from wishlist" : "Saved to wishlist"); }}><Heart size={17} fill={saved ? "currentColor" : "none"} /></button></div>
+    <p className="preview-note">ORDERS ARE CONFIRMED ON WHATSAPP. WE'LL REPLY WITH AVAILABILITY AND DELIVERY DETAILS.</p></div></div></Modal>;
 }
 
 function Quantity({ value, setValue }: { value: number; setValue: (value: number) => void }) {
@@ -245,9 +258,9 @@ function Quantity({ value, setValue }: { value: number; setValue: (value: number
 function Drawer({ mode, shop, close, setMode, onQuick, onCheckout }: { mode: "cart" | "wish"; shop: Shop; close: () => void; setMode: (overlay: Overlay) => void; onQuick: (product: Product) => void; onCheckout: () => void }) {
   const wishlist = PRODUCTS.filter((product) => shop.wish.includes(product.id));
   const left = FREE_SHIPPING - shop.subtotal;
-  return <Modal close={close} side><div className="drawer-head"><div className="drawer-tabs"><button className={mode === "cart" ? "active" : ""} onClick={() => setMode("cart")}>Preview bag <span>{shop.count}</span></button><button className={mode === "wish" ? "active" : ""} onClick={() => setMode("wish")}>Wishlist <span>{shop.wish.length}</span></button></div><CloseButton close={close} /></div>
-    <div className="drawer-body">{mode === "cart" ? shop.lines.length === 0 ? <EmptyState text="Your preview bag is empty." close={close} /> : shop.lines.map((line) => <div className="drawer-line" key={line.key}><img src={line.p.category === "baggy" ? baggyImage : hoodieImage} alt="" /><div className="line-details"><strong>{line.p.name}</strong><small>{[line.colour, line.size].filter(Boolean).join(" / ")}</small><div><Quantity value={line.qty} setValue={(qty) => shop.setQty(line.key, qty)} /><b>{pkr(line.unit * line.qty)}</b></div></div></div>) : wishlist.length === 0 ? <EmptyState text="Nothing saved yet." close={close} /> : wishlist.map((product) => <div className="drawer-line" key={product.id}><img src={product.category === "baggy" ? baggyImage : hoodieImage} alt="" /><div className="line-details"><strong>{product.name}</strong><small>{pkr(product.price)} · COMING SOON</small><button className="select-piece" onClick={() => { close(); onQuick(product); }}>Select piece <ArrowUpRight size={13} /></button></div><button aria-label="Remove from wishlist" className="remove-line" onClick={() => shop.toggleWish(product.id)}><X size={16} /></button></div>)}</div>
-    {mode === "cart" && shop.lines.length > 0 && <div className="drawer-summary"><p className="shipping-hint">{left > 0 ? `Add ${pkr(left)} more for free shipping.` : "You've unlocked free shipping."}</p><SummaryRow label="Subtotal" value={pkr(shop.subtotal)} /><SummaryRow label="Shipping" value={shop.shipping ? pkr(shop.shipping) : "Free"} /><SummaryRow label="Total" value={pkr(shop.total)} bold /><button className="button-primary checkout-button" onClick={onCheckout}>Continue to demo checkout <ArrowUpRight size={15} /></button><p className="preview-note">DEMO ONLY · NO ORDER IS SENT · NO PAYMENT IS TAKEN</p></div>}</Modal>;
+  return <Modal close={close} side><div className="drawer-head"><div className="drawer-tabs"><button className={mode === "cart" ? "active" : ""} onClick={() => setMode("cart")}>Bag <span>{shop.count}</span></button><button className={mode === "wish" ? "active" : ""} onClick={() => setMode("wish")}>Wishlist <span>{shop.wish.length}</span></button></div><CloseButton close={close} /></div>
+    <div className="drawer-body">{mode === "cart" ? shop.lines.length === 0 ? <EmptyState text="Your bag is empty." close={close} /> : shop.lines.map((line) => <div className="drawer-line" key={line.key}><img src={line.p.image || (line.p.category === "baggy" ? baggyImage : hoodieImage)} alt="" /><div className="line-details"><strong>{line.p.name}</strong><small>{[line.colour, line.size].filter(Boolean).join(" / ")}</small><div><Quantity value={line.qty} setValue={(qty) => shop.setQty(line.key, qty)} /><b>{pkr(line.unit * line.qty)}</b></div></div></div>) : wishlist.length === 0 ? <EmptyState text="Nothing saved yet." close={close} /> : wishlist.map((product) => <div className="drawer-line" key={product.id}><img src={product.image || (product.category === "baggy" ? baggyImage : hoodieImage)} alt="" /><div className="line-details"><strong>{product.name}</strong><small>{pkr(product.price)} · COMING SOON</small><button className="select-piece" onClick={() => { close(); onQuick(product); }}>Select piece <ArrowUpRight size={13} /></button></div><button aria-label="Remove from wishlist" className="remove-line" onClick={() => shop.toggleWish(product.id)}><X size={16} /></button></div>)}</div>
+    {mode === "cart" && shop.lines.length > 0 && <div className="drawer-summary"><p className="shipping-hint">{left > 0 ? `Add ${pkr(left)} more for free shipping.` : "You've unlocked free shipping."}</p><SummaryRow label="Subtotal" value={pkr(shop.subtotal)} /><SummaryRow label="Shipping" value={shop.shipping ? pkr(shop.shipping) : "Free"} /><SummaryRow label="Total" value={pkr(shop.total)} bold /><button className="button-primary checkout-button" onClick={onCheckout}>Continue to checkout <ArrowUpRight size={15} /></button><p className="preview-note">ORDERS ARE CONFIRMED ON WHATSAPP · CASH ON DELIVERY NATIONWIDE</p></div>}</Modal>;
 }
 
 function EmptyState({ text, close }: { text: string; close: () => void }) { return <div className="empty-state"><span>SE7EN / 00</span><p>{text}</p><a className="button-outline" href="#shop" onClick={close}>Continue browsing <ArrowUpRight size={14} /></a></div>; }
@@ -258,34 +271,96 @@ function Checkout({ shop, close }: { shop: Shop; close: () => void }) {
   const [fields, setFields] = useState({ name: "", phone: "", email: "", address: "", city: "", province: "Punjab", postal: "", payment: "Cash on Delivery" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [complete, setComplete] = useState(false);
+  const [whatsappUrl, setWhatsappUrl] = useState("");
+  const [promoInput, setPromoInput] = useState(() => { try { return localStorage.getItem("se7en_promo") ?? ""; } catch { return ""; } });
+  const [appliedCode, setAppliedCode] = useState<string | null>(() => { try { const v = localStorage.getItem("se7en_promo"); return v && v.toUpperCase() === "WELCOME10" ? "WELCOME10" : null; } catch { return null; } });
+  const [promoError, setPromoError] = useState("");
+  const discountAmount = appliedCode ? Math.max(0, Math.min(Math.round(shop.subtotal * 0.1), shop.subtotal)) : 0;
+  const finalTotal = Math.max(0, shop.subtotal - discountAmount + shop.shipping);
   const update = (key: keyof typeof fields, value: string) => setFields((current) => ({ ...current, [key]: value }));
-  const validate = () => {
+  const applyPromo = () => {
+    if (promoInput.trim().toUpperCase() === "WELCOME10") {
+      setAppliedCode("WELCOME10");
+      setPromoError("");
+    } else {
+      setAppliedCode(null);
+      setPromoError("Invalid promo code.");
+    }
+  };
+  const validate = (targetStep = step) => {
     const next: Record<string, string> = {};
-    if (step === 0) {
+    const checkContact = () => {
       if (fields.name.trim().length < 2) next.name = "Enter your full name.";
       if (!/^(\+92|0)?3\d{2}[- ]?\d{7}$/.test(fields.phone.replace(/\s/g, ""))) next.phone = "Enter a valid Pakistani mobile, e.g. 03001234567.";
       if (fields.email && !/^\S+@\S+\.\S+$/.test(fields.email)) next.email = "Enter a valid email.";
-    }
-    if (step === 1) {
+    };
+    const checkDelivery = () => {
       if (fields.address.trim().length < 8) next.address = "Enter your complete address.";
       if (!fields.city.trim()) next.city = "Enter your city.";
       if (fields.postal && !/^\d{5}$/.test(fields.postal)) next.postal = "Postal code is 5 digits.";
+    };
+    if (targetStep === 0) checkContact();
+    else if (targetStep === 1) checkDelivery();
+    else {
+      checkContact();
+      checkDelivery();
     }
     setErrors(next);
-    return Object.keys(next).length === 0;
+    if (Object.keys(next).length > 0) {
+      if (next.name || next.phone || next.email) setStep(0);
+      else if (next.address || next.city || next.postal) setStep(1);
+      return false;
+    }
+    return true;
   };
-  const placePreview = () => { setComplete(true); shop.clear(); };
-  if (complete) return <Modal close={close}><div className="completion"><span className="completion-check"><Check size={21} /></span><p className="eyebrow">DEMO COMPLETE</p><h2>Preview only.</h2><p>Thanks, {fields.name}. This is only a checkout preview. No order has been sent, no inventory reserved, and no payment was taken.</p><button className="button-primary" onClick={close}>Back to store</button></div></Modal>;
-  return <Modal close={close} wide><div className="checkout-head"><div><p className="eyebrow">A CHECKOUT PREVIEW</p><h2>Guest checkout</h2></div><CloseButton close={close} /></div><div className="checkout-warning">DEMO ONLY — no order is sent and no payment is taken.</div>
+  const buildWhatsAppUrl = () => {
+    const orderLines = [
+      "*NEW ORDER — SE7EN STREETWEAR*",
+      "",
+      "*Customer Details:*",
+      `• Name: ${fields.name.trim()}`,
+      `• Phone: ${fields.phone.trim()}`,
+    ];
+    if (fields.email.trim()) {
+      orderLines.push(`• Email: ${fields.email.trim()}`);
+    }
+    orderLines.push(
+      `• Delivery Address: ${fields.address.trim()}, ${fields.city.trim()}, ${fields.province}${fields.postal.trim() ? ` (${fields.postal.trim()})` : ""}, Pakistan`,
+      `• Payment Method: ${fields.payment}`,
+      "",
+      "*Order Items:*",
+      ...shop.lines.map((l) => `• ${l.qty}× ${l.p.name} (${[l.size, l.colour].filter(Boolean).join(" / ")}) — ${pkr(l.unit * l.qty)}`),
+      "",
+      `*Subtotal:* ${pkr(shop.subtotal)}`,
+    );
+    if (appliedCode) {
+      orderLines.push(`*Promo:* ${appliedCode} (-${pkr(discountAmount)})`);
+    }
+    orderLines.push(
+      `*Shipping:* ${shop.shipping ? pkr(shop.shipping) : "Free"}`,
+      `*Total:* ${pkr(finalTotal)}`
+    );
+    return `https://wa.me/${WHATSAPP_NUMBER || "923010802810"}?text=${encodeURIComponent(orderLines.join("\n"))}`;
+  };
+  const placeOrder = () => {
+    if (!validate(3)) return;
+    const url = buildWhatsAppUrl();
+    setWhatsappUrl(url);
+    setComplete(true);
+    window.open(url, "_blank");
+    shop.clear();
+  };
+  if (complete) return <Modal close={close}><div className="completion"><span className="completion-check"><MessageCircle size={21} /></span><p className="eyebrow">ORDER READY</p><h2>Send it on WhatsApp.</h2><p>Thanks, {fields.name}. Your order is written out and waiting in WhatsApp — press <b>Send</b> there and we'll confirm availability and delivery.</p><p className="preview-note">Didn't open? Use the button below.</p><div className="checkout-controls"><button className="button-outline" onClick={close}>Back to store</button>{whatsappUrl && <a className="button-primary" href={whatsappUrl} target="_blank" rel="noopener noreferrer">Open WhatsApp <MessageCircle size={15} /></a>}</div></div></Modal>;
+  return <Modal close={close} wide><div className="checkout-head"><div><p className="eyebrow">CHECKOUT</p><h2>Guest checkout</h2></div><CloseButton close={close} /></div><div className="checkout-warning">Your order opens in WhatsApp — press Send there to confirm.</div>
     <div className="checkout-layout"><div className="checkout-form"><ol className="steps">{["Contact", "Delivery", "Payment", "Review"].map((name, index) => <li className={index === step ? "current" : index < step ? "passed" : ""} key={name}><span>0{index + 1}</span>{name}</li>)}</ol>
-      {shop.lines.length === 0 ? <p className="muted">Your preview bag is empty.</p> : <div className="step-content">
+      {shop.lines.length === 0 ? <p className="muted">Your bag is empty.</p> : <div className="step-content">
         {step === 0 && <><Field label="Full name" value={fields.name} onChange={(value) => update("name", value)} error={errors.name} /><Field label="Phone" type="tel" placeholder="03XX XXXXXXX" value={fields.phone} onChange={(value) => update("phone", value)} error={errors.phone} /><Field label="Email (optional)" type="email" value={fields.email} onChange={(value) => update("email", value)} error={errors.email} /></>}
         {step === 1 && <><Field label="Complete address" placeholder="House, street, area" value={fields.address} onChange={(value) => update("address", value)} error={errors.address} /><div className="field-pair"><Field label="City" value={fields.city} onChange={(value) => update("city", value)} error={errors.city} /><Field label="Postal code (optional)" value={fields.postal} onChange={(value) => update("postal", value)} error={errors.postal} /></div><label className="field-label">PROVINCE<select className="form-field" value={fields.province} onChange={(event) => update("province", event.target.value)}>{PROVINCES.map((province) => <option key={province}>{province}</option>)}</select></label><Field label="Country" value="Pakistan" onChange={() => undefined} disabled /></>}
-        {step === 2 && <div className="payment-options">{["Cash on Delivery", "Bank Transfer"].map((payment) => <label className={fields.payment === payment ? "payment-choice chosen" : "payment-choice"} key={payment}><input type="radio" checked={fields.payment === payment} onChange={() => update("payment", payment)} /><span><b>{payment}</b><small>{payment === "Cash on Delivery" ? "Pay in cash when your order arrives." : "Bank details are shared after the order is confirmed."}</small></span></label>)}<p className="preview-note">Payment options are shown for demo only. No payment setup is connected.</p></div>}
-        {step === 3 && <div className="review-list"><Review label="Contact" value={`${fields.name} · ${fields.phone}${fields.email ? ` · ${fields.email}` : ""}`} edit={() => setStep(0)} /><Review label="Delivery" value={`${fields.address}, ${fields.city}, ${fields.province}${fields.postal ? ` ${fields.postal}` : ""}, Pakistan`} edit={() => setStep(1)} /><Review label="Payment" value={fields.payment} edit={() => setStep(2)} /><p className="preview-note">This is a demo. Confirming does not place an order or take payment.</p></div>}
-        <div className="checkout-controls"><button className="button-outline" onClick={() => step ? setStep(step - 1) : close()}>{step ? "Back" : "Cancel"}</button>{step < 3 ? <button className="button-primary" onClick={() => { if (validate()) setStep(step + 1); }}>Continue <ArrowUpRight size={15} /></button> : <button className="button-primary" onClick={placePreview}>Complete preview <Check size={15} /></button>}</div>
+        {step === 2 && <div className="payment-options">{["Cash on Delivery", "Bank Transfer"].map((payment) => <label className={fields.payment === payment ? "payment-choice chosen" : "payment-choice"} key={payment}><input type="radio" checked={fields.payment === payment} onChange={() => update("payment", payment)} /><span><b>{payment}</b><small>{payment === "Cash on Delivery" ? "Pay in cash when your order arrives." : "Bank details are shared after the order is confirmed."}</small></span></label>)}<p className="preview-note">Cash on delivery nationwide. Bank transfer details are shared on WhatsApp once you send your order.</p></div>}
+        {step === 3 && <div className="review-list"><Review label="Contact" value={`${fields.name} · ${fields.phone}${fields.email ? ` · ${fields.email}` : ""}`} edit={() => setStep(0)} /><Review label="Delivery" value={`${fields.address}, ${fields.city}, ${fields.province}${fields.postal ? ` ${fields.postal}` : ""}, Pakistan`} edit={() => setStep(1)} /><Review label="Payment" value={fields.payment} edit={() => setStep(2)} /><p className="preview-note">Pressing Send in WhatsApp confirms your order. Payment is collected on delivery.</p></div>}
+        <div className="checkout-controls"><button className="button-outline" onClick={() => step ? setStep(step - 1) : close()}>{step ? "Back" : "Cancel"}</button>{step < 3 ? <button className="button-primary" onClick={() => { if (validate()) setStep(step + 1); }}>Continue <ArrowUpRight size={15} /></button> : <button className="button-primary" onClick={placeOrder}>Send order on WhatsApp <MessageCircle size={15} /></button>}</div>
       </div>}
-    </div><aside className="checkout-summary"><p className="field-label">YOUR PREVIEW BAG</p>{shop.lines.map((line) => <div className="checkout-item" key={line.key}><span>{line.qty}× {line.p.name} <small>{line.size}</small></span><b>{pkr(line.unit * line.qty)}</b></div>)}<SummaryRow label="Subtotal" value={pkr(shop.subtotal)} /><SummaryRow label="Shipping" value={shop.shipping ? pkr(shop.shipping) : "Free"} /><SummaryRow label="Total" value={pkr(shop.total)} bold /></aside></div></Modal>;
+    </div><aside className="checkout-summary"><p className="field-label">YOUR ORDER</p>{shop.lines.map((line) => <div className="checkout-item" key={line.key}><span>{line.qty}× {line.p.name} <small>{line.size}</small></span><b>{pkr(line.unit * line.qty)}</b></div>)}<SummaryRow label="Subtotal" value={pkr(shop.subtotal)} />{appliedCode && <SummaryRow label={`Discount (${appliedCode})`} value={`-${pkr(discountAmount)}`} />}<SummaryRow label="Shipping" value={shop.shipping ? pkr(shop.shipping) : "Free"} /><SummaryRow label="Total" value={pkr(finalTotal)} bold /><div className="field-pair"><input className="form-field" placeholder="Promo code" value={promoInput} onChange={(e) => { setPromoInput(e.target.value); setPromoError(""); }} /><button className="button-primary" onClick={applyPromo}>Apply</button></div>{promoError && <small className="form-error">{promoError}</small>}</aside></div></Modal>;
 }
 
 function Field({ label, type = "text", placeholder, value, onChange, error, disabled }: { label: string; type?: string; placeholder?: string; value: string; onChange: (value: string) => void; error?: string; disabled?: boolean }) {
@@ -294,11 +369,11 @@ function Field({ label, type = "text", placeholder, value, onChange, error, disa
 function Review({ label, value, edit }: { label: string; value: string; edit: () => void }) { return <div className="review-card"><span><small>{label}</small>{value}</span><button onClick={edit}>Edit</button></div>; }
 
 function SizeGuide({ close }: { close: () => void }) {
-  const rows = [["S", "40", "27"], ["M", "42", "28"], ["L", "44", "29"], ["XL", "46", "30"], ["XXL", "48", "31"]];
+  const rows = [["S", "40", "27"], ["M", "42", "28"], ["L", "44", "29"], ["XL", "46", "30"]];
   return <Modal close={close}><div className="size-guide"><div className="modal-heading"><div><p className="eyebrow">FIT / REFERENCE</p><h2>Size guide</h2></div><CloseButton close={close} /></div><p>Measurements in inches, garment laid flat. Oversized fit — size down for a closer fit.</p><table><thead><tr><th>Size</th><th>Chest</th><th>Length</th></tr></thead><tbody>{rows.map((row) => <tr key={row[0]}><th>{row[0]}</th><td>{row[1]}"</td><td>{row[2]}"</td></tr>)}</tbody></table></div></Modal>;
 }
 
 function Welcome({ close }: { close: () => void }) {
   const [done, setDone] = useState(false);
-  return <Modal close={close}><div className="welcome-modal"><div className="welcome-close"><CloseButton close={close} /></div><p className="eyebrow">WELCOME OFFER / PREVIEW ONLY</p><h2>10% off your<br />first order.</h2>{done ? <><p>Preview code:</p><strong className="welcome-code">WELCOME10</strong><p className="preview-note">This offer isn't active. Your email wasn't saved or sent.</p><button className="button-outline" onClick={close}>Start browsing</button></> : <form onSubmit={(event) => { event.preventDefault(); setDone(true); }}><label className="field-label" htmlFor="welcome-email">EMAIL ADDRESS</label><div className="welcome-entry"><input id="welcome-email" type="email" required placeholder="you@example.com" /><button className="button-primary">Preview code</button></div></form>}<button className="no-thanks" onClick={close}>No thanks</button><p className="preview-note">Demo only — discount is not active and email isn't saved or sent.</p></div></Modal>;
+  return <Modal close={close}><div className="welcome-modal"><div className="welcome-close"><CloseButton close={close} /></div><p className="eyebrow">WELCOME OFFER / PREVIEW ONLY</p><h2>10% off your<br />first order.</h2>{done ? <><p>Preview code:</p><strong className="welcome-code">WELCOME10</strong><p className="preview-note">This offer isn't active. Your email wasn't saved or sent.</p><button className="button-outline" onClick={close}>Start browsing</button></> : <form onSubmit={(event) => { event.preventDefault(); try { localStorage.setItem("se7en_promo", "WELCOME10"); } catch { /* ignore */ } setDone(true); }}><label className="field-label" htmlFor="welcome-email">EMAIL ADDRESS</label><div className="welcome-entry"><input id="welcome-email" type="email" required placeholder="you@example.com" /><button className="button-primary">Preview code</button></div></form>}<button className="no-thanks" onClick={close}>No thanks</button><p className="preview-note">Demo only — discount is not active and email isn't saved or sent.</p></div></Modal>;
 }

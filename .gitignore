@@ -47,3 +47,10 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Local agent scratch and conversation logs
+.agents/
+.conversation/
+
+# Local logs
+*.log
