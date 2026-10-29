@@ -27,19 +27,19 @@ Output is written to `artifacts/se7en-store/dist/public`.
 
 ## Deploy
 
-Vercel runs this repo as a single project with two services, configured in `vercel.json`:
+The storefront deploys to Vercel as **one static project**. Vercel builds from the repository root (so the pnpm workspace catalog and `attached_assets/` resolve) and only publishes the Vite output. Everything is configured in `vercel.json`:
 
-| Service | Root | Public path | Notes |
-| --- | --- | --- | --- |
-| `se7en-store` | `artifacts/se7en-store` | `/` (catch-all) | Vite static build, output `dist/public` |
-| `api-server` | `artifacts/api-server` | `/api/*` | Express app, entrypoint `src/app.ts`, only `/api/healthz` today |
+| Setting | Value |
+| --- | --- |
+| Framework preset | `Other` |
+| Install command | `pnpm install` (Vercel default; the committed lockfile makes it deterministic) |
+| Build command | `pnpm --filter @workspace/se7en-store run build` |
+| Output directory | `artifacts/se7en-store/dist/public` |
 
-- `mockup-sandbox` is a design-only component canvas and is intentionally not deployed.
-- No service bindings are declared: the storefront is fully static and never calls the API, and the API does not call anything else.
-- Requests keep their original path inside a service, so the public `/api/healthz` hits the Express router mounted at `/api` and resolves to `/healthz`.
-- Cache headers stay at the top level of `vercel.json` and apply to all public traffic.
-
-After changing `vercel.json`, redeploy from the Vercel dashboard with **Framework Preset: Other** and no dashboard-level build/output overrides — the service settings come from the file.
+- Leave **Root Directory** at the repository root and keep the dashboard build/output fields empty — `vercel.json` wins.
+- `artifacts/api-server` and `artifacts/mockup-sandbox` are intentionally **not** deployed. The storefront is fully static and never calls the API, and the API only exposes `/api/healthz`, so it is dead weight (plus it needs `DATABASE_URL`).
+- `rewrites` sends every non-file path to `index.html` so client-side links never 404, and the `headers` block long-caches hashed assets under `/assets/`.
+- To add the API later, reintroduce a `services` block in `vercel.json` (see git history, commit `0deaa72`) and mirror it with a Vercel project setting Root Directory = repo root.
 
 ## Layout
 
