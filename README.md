@@ -52,5 +52,9 @@ attached_assets/          product photography used by the store
 ## Notes
 
 - Prices are PKR; free shipping over PKR 5,000.
-- Newsletter signup and the `WELCOME10` welcome popup are still front-end only (no email service, no live discount).
-- Product badges currently read "COMING SOON" — update the copy when the drop goes fully live.
+- **Launch switch:** `STORE_MODE` in `artifacts/se7en-store/src/reference/original-store.ts` is `"live"` (bag → checkout → WhatsApp) or `"teaser"` (nothing buyable, WhatsApp "notify me" only). Every badge, badge label and CTA follows it.
+- There is no backend by design: the bag and wishlist live in `localStorage`, and orders are handed off to WhatsApp.
+- `WELCOME10` is a real 10% discount applied in checkout, claimed from the welcome popup and stored in `localStorage` (`se7en_promo`).
+- "Get drop alerts" in the newsletter section opens WhatsApp with a prefilled message — no email collection, so there is nothing to store or leak.
+- Policies (shipping, returns, privacy) are in-app copy in `App.tsx` → `Policies`. Review the wording before running any paid traffic.
+- Replace `WHATSAPP_NUMBER` and the `https://se7en-storefront.vercel.app` canonical/OG URLs in `index.html` if either changes.

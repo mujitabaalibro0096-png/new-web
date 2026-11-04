@@ -1,2 +1,4 @@
 User-agent: *
 Allow: /
+
+Sitemap: https://se7en-storefront.vercel.app/sitemap.xml

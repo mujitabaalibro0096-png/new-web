@@ -1,9 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
-import baggyBlackFuturistic from "@/assets/baggy-black-futuristic.png";
-import baggyBlackCyber from "@/assets/baggy-black-cyber.png";
-import baggyBlack3 from "@/assets/baggy-black-3.png";
-import baggyWhite1 from "@/assets/baggy-white-1.png";
-import baggyWhite2 from "@/assets/baggy-white-2.png";
+import baggyBlackFuturistic from "@/assets/baggy-black-futuristic.jpg";
+import baggyBlackCyber from "@/assets/baggy-black-cyber.jpg";
+import baggyBlack3 from "@/assets/baggy-black-3.jpg";
+import baggyWhite1 from "@/assets/baggy-white-1.jpg";
+import baggyWhite2 from "@/assets/baggy-white-2.jpg";
 import hoodie from "@/assets/hoodie.jpg";
 
 export type Category = "baggy" | "hoodie";
@@ -18,7 +18,22 @@ export const CATEGORIES: { id: Category; name: string }[] = [
 ];
 
 const T = ["S", "M", "L", "XL"];
-const SOON = "COMING SOON";
+
+/**
+ * Launch switch.
+ *   "live"   → products are orderable (bag → checkout → WhatsApp).
+ *   "teaser" → nothing can be bought; every piece shows as coming soon and the
+ *              only call to action is a WhatsApp "notify me" link.
+ * Flip this one value and push to switch the whole store over.
+ */
+export const STORE_MODE: "live" | "teaser" = "live";
+export const IS_LIVE = STORE_MODE === "live";
+
+const SOON = IS_LIVE ? "DROP 01" : "COMING SOON";
+export const BADGE_LABEL = SOON;
+
+export const WHATSAPP_LINK = (message?: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER}${message ? `?text=${encodeURIComponent(message)}` : ""}`;
 export const PRODUCTS: Product[] = [
   { id: 1, name: "FUTURISTIC PERSPECTIVE", category: "baggy", type: "Baggy / Oversized", price: 2899, badge: SOON, sizes: T, colours: ["Black"], image: baggyBlackFuturistic, note: "Grid perspective graphics with futuristic cyber typography on heavyweight black cotton." },
   { id: 2, name: "CYBER GOTHIC", category: "baggy", type: "Baggy / Oversized", price: 2999, badge: SOON, sizes: T, colours: ["Black"], image: baggyBlackCyber, note: "Chrome metallic tribal lettering with deep gothic edge on oversized fit." },
