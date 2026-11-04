@@ -14,6 +14,9 @@ import {
 type Overlay = null | "search" | "menu" | "cart" | "wish" | "checkout" | "size" | "welcome" | "policies";
 const SORTS = ["Featured", "Price Low to High", "Price High to Low", "Name"] as const;
 const PROVINCES = ["Punjab", "Sindh", "Khyber Pakhtunkhwa", "Balochistan", "Islamabad Capital Territory", "Gilgit-Baltistan", "Azad Jammu & Kashmir"];
+/** Social profiles — leave a URL empty to hide that link in the footer. */
+const INSTAGRAM_URL = "https://www.instagram.com/7sevenpk";
+const TIKTOK_URL = "";
 
 export default function App() {
   const shop = useShop();
@@ -220,6 +223,7 @@ function Footer({ goShop, open }: { goShop: (category: Category | "all") => void
       <div><p className="footer-label">THE DROP</p><button onClick={() => goShop("all")}>All pieces</button><button onClick={() => goShop("baggy")}>Baggy shirts</button><button onClick={() => goShop("hoodie")}>Hoodies</button></div>
       <div><p className="footer-label">NEED TO KNOW</p><button onClick={() => open("size")}>Size guide</button><button onClick={() => open("policies")}>Shipping &amp; delivery</button><button onClick={() => open("policies")}>Returns &amp; exchanges</button><p>Shipping: {pkr(SHIPPING_FEE)}<br />Free over {pkr(FREE_SHIPPING)}</p></div>
       <div><p className="footer-label">SE7EN / PAKISTAN</p><a href="#about">About the label</a><button onClick={() => open("policies")}>Privacy</button><a href={WHATSAPP_LINK("Hi SE7EN, I'd like to order. Please share availability and delivery details.")} target="_blank" rel="noopener noreferrer">Order on WhatsApp <ArrowUpRight size={12} /></a><p>Cash on delivery<br />Nationwide</p></div>
+      <div><p className="footer-label">FOLLOW</p><a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">Instagram <ArrowUpRight size={12} /></a>{TIKTOK_URL && <a href={TIKTOK_URL} target="_blank" rel="noopener noreferrer">TikTok <ArrowUpRight size={12} /></a>}<p>New drops land<br />on social first</p></div>
     </div><div className="footer-bottom"><span>© {new Date().getFullYear()} SE7EN</span><span>{IS_LIVE ? "DROP 01 — LIVE NOW" : "DROP 01 — COMING SOON"}</span><span>ORDERS VIA WHATSAPP</span></div></footer>
   );
 }

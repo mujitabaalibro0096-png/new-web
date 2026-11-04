@@ -161,7 +161,7 @@ h1, h2, h3, .brand, .tile-caption strong { font-family: Anton, Impact, sans-seri
 .subscribed { display: flex; align-items: center; gap: 10px; color: #ddd; font-size: 13px; }
 .subscribed svg { color: #d20b18; }
 .footer { background: #080808; }
-.footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1.25fr 1.2fr; gap: 35px; padding-top: 64px; padding-bottom: 58px; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr .95fr 1.15fr 1.05fr .85fr; gap: 35px; padding-top: 64px; padding-bottom: 58px; }
 .footer-brand .brand { width: 118px; }
 .footer-brand p { margin-top: 12px; color: #777; font-size: 8px; letter-spacing: .2em; }
 .footer-label { margin: 2px 0 15px; color: #df101c; font-size: 8px; font-weight: 700; letter-spacing: .2em; }
@@ -389,6 +389,7 @@ h1, h2, h3, .brand, .tile-caption strong { font-family: Anton, Impact, sans-seri
   .newsletter-watermark { right: -9%; top: -55px; font-size: 280px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 29px 18px; padding-top: 43px; padding-bottom: 39px; }
   .footer-brand { grid-column: span 2; }
+  .footer-grid > div:last-child { grid-column: span 2; }
   .footer-bottom { padding: 13px 5%; flex-wrap: wrap; gap: 9px; font-size: 7px; }
   .footer-bottom span:last-child { width: 100%; }
   .modal-backdrop { padding: 10px; }
@@ -686,6 +687,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .hero-index { display: none; }
   .footer-grid { grid-template-columns: minmax(0, 1fr); gap: 26px; }
   .footer-brand { grid-column: auto; }
+  .footer-grid > div:last-child { grid-column: auto; }
   .footer-bottom { justify-content: flex-start; }
   .field-pair { grid-template-columns: minmax(0, 1fr); }
   .steps { flex-wrap: wrap; row-gap: 6px; }
