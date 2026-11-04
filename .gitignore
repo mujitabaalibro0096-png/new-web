@@ -54,3 +54,8 @@ Thumbs.db
 
 # Local logs
 *.log
+
+# Vercel CLI link state and local secrets
+.vercel
+.env*
+!.env.example
