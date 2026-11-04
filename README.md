@@ -58,4 +58,6 @@ attached_assets/          product photography used by the store
 - `WELCOME10` is a real 10% discount applied in checkout, claimed from the welcome popup and stored in `localStorage` (`se7en_promo`).
 - "Get drop alerts" in the newsletter section opens WhatsApp with a prefilled message — no email collection, so there is nothing to store or leak.
 - Policies (shipping, returns, privacy) are in-app copy in `App.tsx` → `Policies`. Review the wording before running any paid traffic.
+- **Social links:** `INSTAGRAM_URL` and `TIKTOK_URL` at the top of `App.tsx`. An empty value hides that link; Instagram is live, TikTok is waiting on a URL.
+- **Search Console:** the property `https://se7en-storefront.vercel.app/` is verified with the HTML file `artifacts/se7en-store/public/googled90d4625cf293e7e.html`. Don't delete or rename that file, or verification drops. `sitemap.xml` is submitted and reads as Success.
 - Replace `WHATSAPP_NUMBER` and the `https://se7en-storefront.vercel.app` canonical/OG URLs in `index.html` if either changes.
