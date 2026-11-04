@@ -8,7 +8,7 @@ import baggyImage from "@/assets/baggy.jpg";
 import hoodieImage from "@/assets/hoodie.jpg";
 import {
   CATEGORIES, PRODUCTS, FREE_SHIPPING, SHIPPING_FEE, WHATSAPP_NUMBER, IS_LIVE, WHATSAPP_LINK,
-  pkr, unitPrice, useShop, type Category, type Product, type Shop,
+  isAvailable, pkr, unitPrice, useShop, type Category, type Product, type Shop,
 } from "@/reference/original-store";
 
 type Overlay = null | "search" | "menu" | "cart" | "wish" | "checkout" | "size" | "welcome" | "policies";
@@ -137,7 +137,7 @@ function Collections({ onPick }: { onPick: (category: Category) => void }) {
         </button>
         <button className="collection-tile" onClick={() => onPick("hoodie")}>
           <img src={hoodieImage} alt="Model wearing a black heavyweight hoodie" loading="lazy" /><span className="collection-wash" />
-          <span className="tile-top">02 / 02 <ArrowUpRight size={17} /></span><span className="tile-caption"><small>DROP 01 — 02</small><strong>HEAVY<br />HOODIES</strong><em>Explore collection <ChevronRight size={14} /></em></span>
+          <span className="tile-top">02 / 02 <ArrowUpRight size={17} /></span><span className="tile-caption"><small>DROP 01 — 02 · COMING SOON</small><strong>HEAVY<br />HOODIES</strong><em>Explore collection <ChevronRight size={14} /></em></span>
         </button>
       </div>
     </section>
@@ -155,10 +155,12 @@ function ShopSection({ shop, filter, setFilter, onQuick, notify }: {
     if (sort === "Name") return [...products].sort((a, b) => a.name.localeCompare(b.name));
     return products;
   }, [filter, sort]);
+  const available = list.filter(isAvailable).length;
+  const totalLabel = available === list.length ? "ALL AVAILABLE" : available === 0 ? "ALL COMING SOON" : `${available} AVAILABLE · ${list.length - available} SOON`;
   return (
     <section className="shop-section" id="shop">
       <div className="section-wrap shop-inner">
-        <div className="shop-title-row"><div><p className="eyebrow">FIRST LOOK / ALL PIECES</p><h2>The drop.</h2></div><span className="product-total">0{list.length} PIECES<br />{IS_LIVE ? "ALL AVAILABLE" : "ALL COMING SOON"}</span></div>
+        <div className="shop-title-row"><div><p className="eyebrow">FIRST LOOK / ALL PIECES</p><h2>The drop.</h2></div><span className="product-total">0{list.length} PIECES<br />{totalLabel}</span></div>
         <div className="shop-toolbar">
           <div className="filters"><SlidersHorizontal size={14} /><button onClick={() => setFilter("all")} className={filter === "all" ? "filter-active" : ""}>All pieces</button>{CATEGORIES.map((category) => <button key={category.id} onClick={() => setFilter(category.id)} className={filter === category.id ? "filter-active" : ""}>{category.name}</button>)}</div>
           <label className="sort-label">SORT <select value={sort} onChange={(event) => setSort(event.target.value as typeof sort)}>{SORTS.map((item) => <option key={item}>{item}</option>)}</select></label>
@@ -173,17 +175,18 @@ function ShopSection({ shop, filter, setFilter, onQuick, notify }: {
 
 function ProductCard({ product, saved, onQuick, toggleWish, index }: { product: Product; saved: boolean; onQuick: (product: Product) => void; toggleWish: () => void; index: number }) {
   const image = product.image || (product.category === "baggy" ? baggyImage : hoodieImage);
+  const buyable = isAvailable(product);
   return (
     <article className="product-card" data-testid={`card-product-${product.id}`}>
       <div className="product-image-wrap">
         <img src={image} alt={product.name} loading="lazy" />
-        <span className="product-badge">{product.badge}</span>
+        <span className="product-badge">{buyable ? product.badge : "COMING SOON"}</span>
         <button className="wish-toggle" aria-label={saved ? "Remove from wishlist" : "Add to wishlist"} onClick={toggleWish}><Heart size={17} fill={saved ? "currentColor" : "none"} /></button>
         <button className="quick-button" onClick={() => onQuick(product)}>Quick view <ArrowUpRight size={14} /></button>
         <span className="image-index">S7 / 0{index + 1}</span>
       </div>
       <div className="product-info"><div><h3>{product.name}</h3><p>{product.type}</p></div><strong>{pkr(product.price)}</strong></div>
-      <p className="card-coming">{IS_LIVE ? "ORDER ON WHATSAPP" : "AVAILABLE SOON"} <span /></p>
+      <p className="card-coming">{buyable ? "ORDER ON WHATSAPP" : "AVAILABLE SOON"} <span /></p>
     </article>
   );
 }
@@ -193,7 +196,7 @@ function About() {
     <section className="about-section" id="about">
       <div className="section-wrap about-layout">
         <div className="about-image"><img src={hoodieImage} alt="SE7EN heavyweight hoodie, made for a relaxed fit" loading="lazy" /><span>SE7EN / PAKISTAN</span></div>
-        <div className="about-copy"><p className="eyebrow">A DIFFERENT KIND OF UNIFORM</p><h2>Made<br />oversized.</h2><p>SE7EN is a streetwear label built around oversized silhouettes and heavyweight fabrics. {IS_LIVE ? "Drop 01 — baggy shirts and hoodies — is live now, delivered across Pakistan." : "Drop 01 — baggy shirts and hoodies — is coming soon."} The details stay deliberate and the attitude simple.</p><div className="about-rule"><span>01</span><span>BUILT DIFFERENT.</span></div></div>
+        <div className="about-copy"><p className="eyebrow">A DIFFERENT KIND OF UNIFORM</p><h2>Made<br />oversized.</h2><p>SE7EN is a streetwear label built around oversized silhouettes and heavyweight fabrics. {IS_LIVE ? "Drop 01 baggy shirts are live now, delivered across Pakistan — hoodies land soon." : "Drop 01 — baggy shirts and hoodies — is coming soon."} The details stay deliberate and the attitude simple.</p><div className="about-rule"><span>01</span><span>BUILT DIFFERENT.</span></div></div>
       </div>
     </section>
   );
@@ -233,7 +236,7 @@ function MobileMenu({ close, goShop, open }: { close: () => void; goShop: (categ
 function SearchOverlay({ close, onPick }: { close: () => void; onPick: (product: Product) => void }) {
   const [query, setQuery] = useState("");
   const results = query.trim() ? PRODUCTS.filter((product) => `${product.name} ${product.type} ${product.category}`.toLowerCase().includes(query.toLowerCase())) : [];
-  return <div className="search-screen"><div className="search-content"><div className="search-bar"><Search size={20} /><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search the drop" aria-label="Search products" /><CloseButton close={close} /></div><p className="eyebrow">{query ? `${results.length} MATCHING PIECES` : "SEARCH / DROP 01"}</p><div className="search-results">{query && results.length === 0 && <p className="muted">No products match “{query}”.</p>}{results.map((product) => <button key={product.id} onClick={() => onPick(product)}><img src={product.image || (product.category === "baggy" ? baggyImage : hoodieImage)} alt="" /><span><strong>{product.name}</strong><small>{product.type}{IS_LIVE ? "" : " · COMING SOON"}</small></span><b>{pkr(product.price)}</b></button>)}</div></div></div>;
+  return <div className="search-screen"><div className="search-content"><div className="search-bar"><Search size={20} /><input autoFocus value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search the drop" aria-label="Search products" /><CloseButton close={close} /></div><p className="eyebrow">{query ? `${results.length} MATCHING PIECES` : "SEARCH / DROP 01"}</p><div className="search-results">{query && results.length === 0 && <p className="muted">No products match “{query}”.</p>}{results.map((product) => <button key={product.id} onClick={() => onPick(product)}><img src={product.image || (product.category === "baggy" ? baggyImage : hoodieImage)} alt="" /><span><strong>{product.name}</strong><small>{product.type}{isAvailable(product) ? "" : " · COMING SOON"}</small></span><b>{pkr(product.price)}</b></button>)}</div></div></div>;
 }
 
 function QuickView({ product, shop, close, openSize, added, notify }: { product: Product; shop: Shop; close: () => void; openSize: () => void; added: () => void; notify: (message: string) => void }) {
@@ -242,12 +245,13 @@ function QuickView({ product, shop, close, openSize, added, notify }: { product:
   const [qty, setQty] = useState(1);
   const [error, setError] = useState("");
   const saved = shop.wish.includes(product.id);
+  const buyable = isAvailable(product);
   const image = product.image || (product.category === "baggy" ? baggyImage : hoodieImage);
-  return <Modal close={close} wide><div className="quick-layout"><img className="quick-image" src={image} alt={product.name} /><div className="quick-details"><div className="quick-top"><p className="eyebrow">{product.type}{IS_LIVE ? " / DROP 01" : " / COMING SOON"}</p><CloseButton close={close} /></div><h2>{product.name}</h2><p className="quick-price">{pkr(size ? unitPrice(product, size) : product.price)}</p><p className="quick-note">{product.note}</p>
+  return <Modal close={close} wide><div className="quick-layout"><img className="quick-image" src={image} alt={product.name} /><div className="quick-details"><div className="quick-top"><p className="eyebrow">{product.type}{buyable ? " / DROP 01" : " / COMING SOON"}</p><CloseButton close={close} /></div><h2>{product.name}</h2><p className="quick-price">{pkr(size ? unitPrice(product, size) : product.price)}</p><p className="quick-note">{product.note}</p>
     <div className="quick-group"><span className="field-label">COLOUR — {colour}</span><div className="chips">{product.colours?.map((item) => <button key={item} className={`chip${colour === item ? " selected" : ""}`} onClick={() => setColour(item)}>{item}</button>)}</div></div>
     <div className="quick-group"><div className="size-title"><span className="field-label">SELECT SIZE</span><button onClick={openSize}>SIZE GUIDE</button></div><div className="chips">{product.sizes.map((item) => <button key={item} className={`chip size-chip${size === item ? " selected" : ""}`} onClick={() => { setSize(item); setError(""); }}>{item}</button>)}</div>{error && <p className="form-error">{error}</p>}</div>
-    <div className="quick-actions">{IS_LIVE ? <><Quantity value={qty} setValue={setQty} /><button className="button-primary preview-add" onClick={() => { if (!size) { setError("Choose a size to add this piece to your bag."); return; } shop.add(product.id, size, colour, qty); notify("Added to bag"); added(); }}>Add to bag</button></> : <a className="button-primary preview-add" href={WHATSAPP_LINK(`Hi SE7EN — please tell me when ${product.name} drops.`)} target="_blank" rel="noopener noreferrer">Notify me on WhatsApp <MessageCircle size={15} /></a>}<button aria-label="Save to wishlist" className={`outline-icon${saved ? " saved" : ""}`} onClick={() => { shop.toggleWish(product.id); notify(saved ? "Removed from wishlist" : "Saved to wishlist"); }}><Heart size={17} fill={saved ? "currentColor" : "none"} /></button></div>
-    <p className="preview-note">{IS_LIVE ? "ORDERS ARE CONFIRMED ON WHATSAPP. WE'LL REPLY WITH AVAILABILITY AND DELIVERY DETAILS." : "DROP 01 IS COMING SOON. MESSAGE US TO BE NOTIFIED FIRST."}</p></div></div></Modal>;
+    <div className="quick-actions">{buyable ? <><Quantity value={qty} setValue={setQty} /><button className="button-primary preview-add" onClick={() => { if (!size) { setError("Choose a size to add this piece to your bag."); return; } shop.add(product.id, size, colour, qty); notify("Added to bag"); added(); }}>Add to bag</button></> : <a className="button-primary preview-add" href={WHATSAPP_LINK(`Hi SE7EN — please tell me when ${product.name} drops.`)} target="_blank" rel="noopener noreferrer">Notify me on WhatsApp <MessageCircle size={15} /></a>}<button aria-label="Save to wishlist" className={`outline-icon${saved ? " saved" : ""}`} onClick={() => { shop.toggleWish(product.id); notify(saved ? "Removed from wishlist" : "Saved to wishlist"); }}><Heart size={17} fill={saved ? "currentColor" : "none"} /></button></div>
+    <p className="preview-note">{buyable ? "ORDERS ARE CONFIRMED ON WHATSAPP. WE'LL REPLY WITH AVAILABILITY AND DELIVERY DETAILS." : "THIS PIECE LANDS SOON. MESSAGE US TO BE NOTIFIED FIRST."}</p></div></div></Modal>;
 }
 
 function Quantity({ value, setValue }: { value: number; setValue: (value: number) => void }) {
@@ -258,7 +262,7 @@ function Drawer({ mode, shop, close, setMode, onQuick, onCheckout }: { mode: "ca
   const wishlist = PRODUCTS.filter((product) => shop.wish.includes(product.id));
   const left = FREE_SHIPPING - shop.subtotal;
   return <Modal close={close} side><div className="drawer-head"><div className="drawer-tabs">{IS_LIVE && <button className={mode === "cart" ? "active" : ""} onClick={() => setMode("cart")}>Bag <span>{shop.count}</span></button>}<button className={mode === "wish" ? "active" : ""} onClick={() => setMode("wish")}>Wishlist <span>{shop.wish.length}</span></button></div><CloseButton close={close} /></div>
-    <div className="drawer-body">{mode === "cart" ? shop.lines.length === 0 ? <EmptyState text="Your bag is empty." close={close} /> : shop.lines.map((line) => <div className="drawer-line" key={line.key}><img src={line.p.image || (line.p.category === "baggy" ? baggyImage : hoodieImage)} alt="" /><div className="line-details"><strong>{line.p.name}</strong><small>{[line.colour, line.size].filter(Boolean).join(" / ")}</small><div><Quantity value={line.qty} setValue={(qty) => shop.setQty(line.key, qty)} /><b>{pkr(line.unit * line.qty)}</b></div></div></div>) : wishlist.length === 0 ? <EmptyState text="Nothing saved yet." close={close} /> : wishlist.map((product) => <div className="drawer-line" key={product.id}><img src={product.image || (product.category === "baggy" ? baggyImage : hoodieImage)} alt="" /><div className="line-details"><strong>{product.name}</strong><small>{pkr(product.price)}{IS_LIVE ? "" : " · COMING SOON"}</small><button className="select-piece" onClick={() => { close(); onQuick(product); }}>Select piece <ArrowUpRight size={13} /></button></div><button aria-label="Remove from wishlist" className="remove-line" onClick={() => shop.toggleWish(product.id)}><X size={16} /></button></div>)}</div>
+    <div className="drawer-body">{mode === "cart" ? shop.lines.length === 0 ? <EmptyState text="Your bag is empty." close={close} /> : shop.lines.map((line) => <div className="drawer-line" key={line.key}><img src={line.p.image || (line.p.category === "baggy" ? baggyImage : hoodieImage)} alt="" /><div className="line-details"><strong>{line.p.name}</strong><small>{[line.colour, line.size].filter(Boolean).join(" / ")}</small><div><Quantity value={line.qty} setValue={(qty) => shop.setQty(line.key, qty)} /><b>{pkr(line.unit * line.qty)}</b></div></div></div>) : wishlist.length === 0 ? <EmptyState text="Nothing saved yet." close={close} /> : wishlist.map((product) => <div className="drawer-line" key={product.id}><img src={product.image || (product.category === "baggy" ? baggyImage : hoodieImage)} alt="" /><div className="line-details"><strong>{product.name}</strong><small>{pkr(product.price)}{isAvailable(product) ? "" : " · COMING SOON"}</small><button className="select-piece" onClick={() => { close(); onQuick(product); }}>Select piece <ArrowUpRight size={13} /></button></div><button aria-label="Remove from wishlist" className="remove-line" onClick={() => shop.toggleWish(product.id)}><X size={16} /></button></div>)}</div>
     {mode === "cart" && shop.lines.length > 0 && <div className="drawer-summary"><p className="shipping-hint">{left > 0 ? `Add ${pkr(left)} more for free shipping.` : "You've unlocked free shipping."}</p><SummaryRow label="Subtotal" value={pkr(shop.subtotal)} /><SummaryRow label="Shipping" value={shop.shipping ? pkr(shop.shipping) : "Free"} /><SummaryRow label="Total" value={pkr(shop.total)} bold /><button className="button-primary checkout-button" onClick={onCheckout}>Continue to checkout <ArrowUpRight size={15} /></button><p className="preview-note">ORDERS ARE CONFIRMED ON WHATSAPP · CASH ON DELIVERY NATIONWIDE</p></div>}</Modal>;
 }
 

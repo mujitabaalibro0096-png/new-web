@@ -10,6 +10,8 @@ export type Category = "baggy" | "hoodie";
 export type Product = {
   id: number; name: string; category: Category; type: string; price: number;
   badge: string; sizes: string[]; colours?: string[] | undefined; image: string; note: string;
+  /** false = teaser even when the store is live (no samples / not launched yet). */
+  live?: boolean;
 };
 
 export const CATEGORIES: { id: Category; name: string }[] = [
@@ -32,6 +34,9 @@ export const IS_LIVE = STORE_MODE === "live";
 const SOON = IS_LIVE ? "DROP 01" : "COMING SOON";
 export const BADGE_LABEL = SOON;
 
+/** A product can be bought only when the store is live and the piece itself is live. */
+export const isAvailable = (product: Product) => IS_LIVE && product.live !== false;
+
 export const WHATSAPP_LINK = (message?: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}${message ? `?text=${encodeURIComponent(message)}` : ""}`;
 export const PRODUCTS: Product[] = [
@@ -40,9 +45,9 @@ export const PRODUCTS: Product[] = [
   { id: 3, name: "NO FILTER BAGGY", category: "baggy", type: "Baggy / Boxy", price: 2799, badge: SOON, sizes: T, colours: ["Black"], image: baggyBlack3, note: "Statement typography with crimson star accents on heavy cotton." },
   { id: 4, name: "VENOM WEB OVERSIZED", category: "baggy", type: "Baggy / Oversized", price: 2899, badge: SOON, sizes: T, colours: ["White"], image: baggyWhite1, note: "Clean white silhouette featuring deep red spider venom back design." },
   { id: 5, name: "DRIPPING SE7EN PURE", category: "baggy", type: "Baggy / Boxy", price: 2899, badge: SOON, sizes: T, colours: ["White"], image: baggyWhite2, note: "Signature bloody typography in deep blood red on crisp white jersey." },
-  { id: 6, name: "HEAVYWEIGHT HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 3999, badge: SOON, sizes: T, colours: ["Black"], image: hoodie, note: "450gsm fleece, double-layer hood, tonal chest mark." },
-  { id: 7, name: "NIGHT PULLOVER", category: "hoodie", type: "Hoodie / Relaxed", price: 3799, badge: SOON, sizes: T, colours: ["Black", "Red"], image: hoodie, note: "Relaxed fit with kangaroo pocket and ribbed cuffs." },
-  { id: 8, name: "SE7EN ZIP HOODIE", category: "hoodie", type: "Hoodie / Zip-up", price: 4299, badge: SOON, sizes: T, colours: ["Black"], image: hoodie, note: "Full zip, heavy jersey, embroidered back logo." },
+  { id: 6, name: "HEAVYWEIGHT HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 3999, badge: "COMING SOON", live: false, sizes: T, colours: ["Black"], image: hoodie, note: "450gsm fleece, double-layer hood, tonal chest mark." },
+  { id: 7, name: "NIGHT PULLOVER", category: "hoodie", type: "Hoodie / Relaxed", price: 3799, badge: "COMING SOON", live: false, sizes: T, colours: ["Black", "Red"], image: hoodie, note: "Relaxed fit with kangaroo pocket and ribbed cuffs." },
+  { id: 8, name: "SE7EN ZIP HOODIE", category: "hoodie", type: "Hoodie / Zip-up", price: 4299, badge: "COMING SOON", live: false, sizes: T, colours: ["Black"], image: hoodie, note: "Full zip, heavy jersey, embroidered back logo." },
 ];
 
 export const FREE_SHIPPING = 5000;

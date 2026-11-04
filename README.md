@@ -53,6 +53,7 @@ attached_assets/          product photography used by the store
 
 - Prices are PKR; free shipping over PKR 5,000.
 - **Launch switch:** `STORE_MODE` in `artifacts/se7en-store/src/reference/original-store.ts` is `"live"` (bag → checkout → WhatsApp) or `"teaser"` (nothing buyable, WhatsApp "notify me" only). Every badge, badge label and CTA follows it.
+- **Per-product availability:** each product also has an optional `live` flag. `live: false` keeps a piece on "coming soon" (wishlist + WhatsApp notify, no add to bag) even while the rest of the store is live — the three hoodies use this until samples land. Delete the flag or set it to `true` to start selling that piece.
 - There is no backend by design: the bag and wishlist live in `localStorage`, and orders are handed off to WhatsApp.
 - `WELCOME10` is a real 10% discount applied in checkout, claimed from the welcome popup and stored in `localStorage` (`se7en_promo`).
 - "Get drop alerts" in the newsletter section opens WhatsApp with a prefilled message — no email collection, so there is nothing to store or leak.
