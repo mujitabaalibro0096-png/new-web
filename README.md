@@ -51,9 +51,10 @@ attached_assets/          product photography used by the store
 
 ## Notes
 
-- Prices are PKR; free shipping over PKR 5,000.
+- Prices are PKR: baggy shirts **PKR 1,999**, hoodies **PKR 2,999**. Free shipping over PKR 5,000; delivery PKR 250 otherwise.
 - **Launch switch:** `STORE_MODE` in `artifacts/se7en-store/src/reference/original-store.ts` is `"live"` (bag → checkout → WhatsApp) or `"teaser"` (nothing buyable, WhatsApp "notify me" only). Every badge, badge label and CTA follows it.
-- **Per-product availability:** each product also has an optional `live` flag. `live: false` keeps a piece on "coming soon" (wishlist + WhatsApp notify, no add to bag) even while the rest of the store is live — the three hoodies use this until samples land. Delete the flag or set it to `true` to start selling that piece.
+- **Per-product availability:** each product also has an optional `live` flag. `live: false` keeps a piece on "coming soon" (wishlist + WhatsApp notify, no add to bag) even while the rest of the store is live. All nine pieces are currently live; set the flag to resume teasing any individual piece.
+- **Hoodie photography:** the four real hoodie shots live in `src/assets/hoodie-33.jpg`, `hoodie-44.jpg`, `hoodie-55.jpg`, `hoodie-66.jpg` (compressed to 900×1125 JPEG). They map to products 6–9 in that order. Source files are in `C:\Users\Grey Tech\OneDrive\Desktop\7SEVEN\HOODIES`.
 - There is no backend by design: the bag and wishlist live in `localStorage`, and orders are handed off to WhatsApp.
 - `WELCOME10` is a real 10% discount applied in checkout, claimed from the welcome popup and stored in `localStorage` (`se7en_promo`).
 - "Get drop alerts" in the newsletter section opens WhatsApp with a prefilled message — no email collection, so there is nothing to store or leak.

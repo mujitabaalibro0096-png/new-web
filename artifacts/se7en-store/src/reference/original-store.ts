@@ -4,7 +4,10 @@ import baggyBlackCyber from "@/assets/baggy-black-cyber.jpg";
 import baggyBlack3 from "@/assets/baggy-black-3.jpg";
 import baggyWhite1 from "@/assets/baggy-white-1.jpg";
 import baggyWhite2 from "@/assets/baggy-white-2.jpg";
-import hoodie from "@/assets/hoodie.jpg";
+import hoodie33 from "@/assets/hoodie-33.jpg";
+import hoodie44 from "@/assets/hoodie-44.jpg";
+import hoodie55 from "@/assets/hoodie-55.jpg";
+import hoodie66 from "@/assets/hoodie-66.jpg";
 
 export type Category = "baggy" | "hoodie";
 export type Product = {
@@ -40,14 +43,15 @@ export const isAvailable = (product: Product) => IS_LIVE && product.live !== fal
 export const WHATSAPP_LINK = (message?: string) =>
   `https://wa.me/${WHATSAPP_NUMBER}${message ? `?text=${encodeURIComponent(message)}` : ""}`;
 export const PRODUCTS: Product[] = [
-  { id: 1, name: "FUTURISTIC PERSPECTIVE", category: "baggy", type: "Baggy / Oversized", price: 2899, badge: SOON, sizes: T, colours: ["Black"], image: baggyBlackFuturistic, note: "Grid perspective graphics with futuristic cyber typography on heavyweight black cotton." },
-  { id: 2, name: "CYBER GOTHIC", category: "baggy", type: "Baggy / Oversized", price: 2999, badge: SOON, sizes: T, colours: ["Black"], image: baggyBlackCyber, note: "Chrome metallic tribal lettering with deep gothic edge on oversized fit." },
-  { id: 3, name: "NO FILTER BAGGY", category: "baggy", type: "Baggy / Boxy", price: 2799, badge: SOON, sizes: T, colours: ["Black"], image: baggyBlack3, note: "Statement typography with crimson star accents on heavy cotton." },
-  { id: 4, name: "VENOM WEB OVERSIZED", category: "baggy", type: "Baggy / Oversized", price: 2899, badge: SOON, sizes: T, colours: ["White"], image: baggyWhite1, note: "Clean white silhouette featuring deep red spider venom back design." },
-  { id: 5, name: "DRIPPING SE7EN PURE", category: "baggy", type: "Baggy / Boxy", price: 2899, badge: SOON, sizes: T, colours: ["White"], image: baggyWhite2, note: "Signature bloody typography in deep blood red on crisp white jersey." },
-  { id: 6, name: "HEAVYWEIGHT HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 3999, badge: "COMING SOON", live: false, sizes: T, colours: ["Black"], image: hoodie, note: "450gsm fleece, double-layer hood, tonal chest mark." },
-  { id: 7, name: "NIGHT PULLOVER", category: "hoodie", type: "Hoodie / Relaxed", price: 3799, badge: "COMING SOON", live: false, sizes: T, colours: ["Black", "Red"], image: hoodie, note: "Relaxed fit with kangaroo pocket and ribbed cuffs." },
-  { id: 8, name: "SE7EN ZIP HOODIE", category: "hoodie", type: "Hoodie / Zip-up", price: 4299, badge: "COMING SOON", live: false, sizes: T, colours: ["Black"], image: hoodie, note: "Full zip, heavy jersey, embroidered back logo." },
+  { id: 1, name: "FUTURISTIC PERSPECTIVE", category: "baggy", type: "Baggy / Oversized", price: 1999, badge: SOON, sizes: T, colours: ["Black"], image: baggyBlackFuturistic, note: "Grid perspective graphics with futuristic cyber typography on heavyweight black cotton." },
+  { id: 2, name: "CYBER GOTHIC", category: "baggy", type: "Baggy / Oversized", price: 1999, badge: SOON, sizes: T, colours: ["Black"], image: baggyBlackCyber, note: "Chrome metallic tribal lettering with deep gothic edge on oversized fit." },
+  { id: 3, name: "NO FILTER BAGGY", category: "baggy", type: "Baggy / Boxy", price: 1999, badge: SOON, sizes: T, colours: ["Black"], image: baggyBlack3, note: "Statement typography with crimson star accents on heavy cotton." },
+  { id: 4, name: "VENOM WEB OVERSIZED", category: "baggy", type: "Baggy / Oversized", price: 1999, badge: SOON, sizes: T, colours: ["White"], image: baggyWhite1, note: "Clean white silhouette featuring deep red spider venom back design." },
+  { id: 5, name: "DRIPPING SE7EN PURE", category: "baggy", type: "Baggy / Boxy", price: 1999, badge: SOON, sizes: T, colours: ["White"], image: baggyWhite2, note: "Signature bloody typography in deep blood red on crisp white jersey." },
+  { id: 6, name: "ASH HEAVYWEIGHT HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 2999, badge: SOON, sizes: T, colours: ["Ash Grey"], image: hoodie33, note: "Heavyweight fleece, relaxed oversized fit, ribbed cuffs and signature SE7EN detailing." },
+  { id: 7, name: "ECRU HEAVYWEIGHT HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 2999, badge: SOON, sizes: T, colours: ["Off White"], image: hoodie44, note: "Heavyweight fleece, relaxed oversized fit, ribbed cuffs and signature SE7EN detailing." },
+  { id: 8, name: "NIGHT PULLOVER", category: "hoodie", type: "Hoodie / Relaxed", price: 2999, badge: SOON, sizes: T, colours: ["Black"], image: hoodie55, note: "Heavyweight fleece, relaxed oversized fit, ribbed cuffs and signature SE7EN detailing." },
+  { id: 9, name: "SE7EN CLASSIC HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 2999, badge: SOON, sizes: T, colours: ["Black"], image: hoodie66, note: "Heavyweight fleece, relaxed oversized fit, ribbed cuffs and signature SE7EN detailing." },
 ];
 
 export const FREE_SHIPPING = 5000;

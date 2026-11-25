@@ -5,7 +5,7 @@ import {
 } from "lucide-react";
 import heroImage from "@/assets/hero.jpg";
 import baggyImage from "@/assets/baggy.jpg";
-import hoodieImage from "@/assets/hoodie.jpg";
+import hoodieImage from "@/assets/hoodie-33.jpg";
 import {
   CATEGORIES, PRODUCTS, FREE_SHIPPING, SHIPPING_FEE, WHATSAPP_NUMBER, IS_LIVE, WHATSAPP_LINK,
   isAvailable, pkr, unitPrice, useShop, type Category, type Product, type Shop,
@@ -140,7 +140,7 @@ function Collections({ onPick }: { onPick: (category: Category) => void }) {
         </button>
         <button className="collection-tile" onClick={() => onPick("hoodie")}>
           <img src={hoodieImage} alt="Model wearing a black heavyweight hoodie" loading="lazy" /><span className="collection-wash" />
-          <span className="tile-top">02 / 02 <ArrowUpRight size={17} /></span><span className="tile-caption"><small>DROP 01 — 02 · COMING SOON</small><strong>HEAVY<br />HOODIES</strong><em>Explore collection <ChevronRight size={14} /></em></span>
+          <span className="tile-top">02 / 02 <ArrowUpRight size={17} /></span><span className="tile-caption"><small>DROP 01 — 02 · {IS_LIVE ? "LIVE NOW" : "COMING SOON"}</small><strong>HEAVY<br />HOODIES</strong><em>Explore collection <ChevronRight size={14} /></em></span>
         </button>
       </div>
     </section>
@@ -199,7 +199,7 @@ function About() {
     <section className="about-section" id="about">
       <div className="section-wrap about-layout">
         <div className="about-image"><img src={hoodieImage} alt="SE7EN heavyweight hoodie, made for a relaxed fit" loading="lazy" /><span>SE7EN / PAKISTAN</span></div>
-        <div className="about-copy"><p className="eyebrow">A DIFFERENT KIND OF UNIFORM</p><h2>Made<br />oversized.</h2><p>SE7EN is a streetwear label built around oversized silhouettes and heavyweight fabrics. {IS_LIVE ? "Drop 01 baggy shirts are live now, delivered across Pakistan — hoodies land soon." : "Drop 01 — baggy shirts and hoodies — is coming soon."} The details stay deliberate and the attitude simple.</p><div className="about-rule"><span>01</span><span>BUILT DIFFERENT.</span></div></div>
+        <div className="about-copy"><p className="eyebrow">A DIFFERENT KIND OF UNIFORM</p><h2>Made<br />oversized.</h2><p>SE7EN is a streetwear label built around oversized silhouettes and heavyweight fabrics. {IS_LIVE ? "Drop 01 baggy shirts and heavyweight hoodies are live now, delivered across Pakistan." : "Drop 01 — baggy shirts and hoodies — is coming soon."} The details stay deliberate and the attitude simple.</p><div className="about-rule"><span>01</span><span>BUILT DIFFERENT.</span></div></div>
       </div>
     </section>
   );
