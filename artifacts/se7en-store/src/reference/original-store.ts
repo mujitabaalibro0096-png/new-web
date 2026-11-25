@@ -48,10 +48,10 @@ export const PRODUCTS: Product[] = [
   { id: 3, name: "NO FILTER BAGGY", category: "baggy", type: "Baggy / Boxy", price: 1999, badge: SOON, sizes: T, colours: ["Black"], image: baggyBlack3, note: "Statement typography with crimson star accents on heavy cotton." },
   { id: 4, name: "VENOM WEB OVERSIZED", category: "baggy", type: "Baggy / Oversized", price: 1999, badge: SOON, sizes: T, colours: ["White"], image: baggyWhite1, note: "Clean white silhouette featuring deep red spider venom back design." },
   { id: 5, name: "DRIPPING SE7EN PURE", category: "baggy", type: "Baggy / Boxy", price: 1999, badge: SOON, sizes: T, colours: ["White"], image: baggyWhite2, note: "Signature bloody typography in deep blood red on crisp white jersey." },
-  { id: 6, name: "ASH HEAVYWEIGHT HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 2999, badge: SOON, sizes: T, colours: ["Ash Grey"], image: hoodie33, note: "Heavyweight fleece, relaxed oversized fit, ribbed cuffs and signature SE7EN detailing." },
-  { id: 7, name: "ECRU HEAVYWEIGHT HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 2999, badge: SOON, sizes: T, colours: ["Off White"], image: hoodie44, note: "Heavyweight fleece, relaxed oversized fit, ribbed cuffs and signature SE7EN detailing." },
-  { id: 8, name: "NIGHT PULLOVER", category: "hoodie", type: "Hoodie / Relaxed", price: 2999, badge: SOON, sizes: T, colours: ["Black"], image: hoodie55, note: "Heavyweight fleece, relaxed oversized fit, ribbed cuffs and signature SE7EN detailing." },
-  { id: 9, name: "SE7EN CLASSIC HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 2999, badge: SOON, sizes: T, colours: ["Black"], image: hoodie66, note: "Heavyweight fleece, relaxed oversized fit, ribbed cuffs and signature SE7EN detailing." },
+  { id: 6, name: "SMOKE HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 2999, badge: SOON, sizes: T, colours: ["Ash Grey"], image: hoodie33, note: "Heavyweight fleece in a washed ash grey, cut in a relaxed oversized fit with signature SE7EN detailing." },
+  { id: 7, name: "BONE HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 2999, badge: SOON, sizes: T, colours: ["Off White"], image: hoodie44, note: "Heavyweight fleece in soft off-white, cut in a relaxed oversized fit with signature SE7EN detailing." },
+  { id: 8, name: "OBSIDIAN PULLOVER", category: "hoodie", type: "Hoodie / Relaxed", price: 2999, badge: SOON, sizes: T, colours: ["Black"], image: hoodie55, note: "Heavyweight fleece in deep black, cut in a relaxed oversized fit with signature SE7EN detailing." },
+  { id: 9, name: "SE7EN SIGNATURE HOODIE", category: "hoodie", type: "Hoodie / Oversized", price: 2999, badge: SOON, sizes: T, colours: ["Black"], image: hoodie66, note: "Heavyweight fleece in deep black, cut in a relaxed oversized fit with the SE7EN signature mark." },
 ];
 
 export const FREE_SHIPPING = 5000;

@@ -61,4 +61,5 @@ attached_assets/          product photography used by the store
 - Policies (shipping, returns, privacy) are in-app copy in `App.tsx` → `Policies`. Review the wording before running any paid traffic.
 - **Social links:** `INSTAGRAM_URL` and `TIKTOK_URL` at the top of `App.tsx`. An empty value hides that link; Instagram is live, TikTok is waiting on a URL.
 - **Search Console:** the property `https://se7en-storefront.vercel.app/` is verified with the HTML file `artifacts/se7en-store/public/googled90d4625cf293e7e.html`. Don't delete or rename that file, or verification drops. `sitemap.xml` is submitted and reads as Success.
+- `WHATSAPP_NUMBER` is confirmed as **`923010802810`** (+92 301 0802810) — every order, notify-me and drop-alert link goes there.
 - Replace `WHATSAPP_NUMBER` and the `https://se7en-storefront.vercel.app` canonical/OG URLs in `index.html` if either changes.
